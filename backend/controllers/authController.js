@@ -21,7 +21,7 @@ const handleLogin = async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '10s' }
+      { expiresIn: '10m' }
     );
     const refreshToken = jwt.sign({ username: existingUser.username }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
     
@@ -35,7 +35,7 @@ const handleLogin = async (req, res) => {
     res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
     // Send authorization roles and access token to user
-    res.json({ roles, accessToken });
+    res.json({ accessToken });
   } else {
     res.sendStatus(401);
   }

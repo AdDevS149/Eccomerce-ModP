@@ -17,8 +17,8 @@ const Login = () => {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [user, resetUser, userAttributes] = useInput('user', ''); //useState('Jane');
-  const [pwd, setPwd] = useState('@123456Ja');
+  const [user, resetUser, userAttribs] = useInput('user', '');
+  const [pwd, setPwd] = useState('B@123456a');
   const [errMsg, setErrMsg] = useState('');
   const [check, toggleCheck] = useToggle('persist', false);
 
@@ -38,12 +38,9 @@ const Login = () => {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
       });
-      console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response));
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
       setAuth({ user, pwd, roles, accessToken });
-      //setUser('');
       resetUser();
       setPwd('');
       navigate(from, { replace: true });
@@ -61,14 +58,6 @@ const Login = () => {
     }
   };
 
-  //   const togglePersist = () => {
-  //     setPersist((prev) => !prev);
-  //   };
-
-  //   useEffect(() => {
-  //     localStorage.setItem('persist', persist);
-  //   }, [persist]);
-
   return (
     <section>
       <p ref={errRef} className={errMsg ? 'errmsg' : 'offscreen'} aria-live='assertive'>
@@ -77,16 +66,7 @@ const Login = () => {
       <h1>Sign In</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor='username'>Username:</label>
-        <input
-          type='text'
-          id='username'
-          ref={userRef}
-          autoComplete='off'
-          {...userAttributes}
-          // onChange={(e) => setUser(e.target.value)}
-          // value={user}
-          required
-        />
+        <input type='text' id='username' ref={userRef} autoComplete='off' {...userAttribs} required />
 
         <label htmlFor='password'>Password:</label>
         <input type='password' id='password' onChange={(e) => setPwd(e.target.value)} value={pwd} required />
@@ -108,6 +88,3 @@ const Login = () => {
 };
 
 export default Login;
-
-// const [user, setUser] = useState('Jane');
-// const [pwd, setPwd] = useState('@123456Ja');

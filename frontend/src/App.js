@@ -1,3 +1,8 @@
+
+
+
+
+// ********** Do not delete Context Api app **********************
 import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
@@ -13,10 +18,10 @@ import PersistLogin from './components/PersistLogin';
 import { Routes, Route } from 'react-router-dom';
 
 const ROLES = {
-  User: 2001,
-  Admin: 5150,
-  Editor: 1984,
-};
+  'User': 2001,
+  'Admin': 5150,
+  'Editor': 1984,
+}
 function App() {
   return (
     <Routes>
@@ -28,23 +33,23 @@ function App() {
         <Route path='unauthorized' element={<Unauthorized />} />
 
         {/* // protected routers */}
-        <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-            <Route path='/' element={<Home />} />
+        <Route element={<PersistLogin/>}> 
+        <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+          <Route path='/' element={<Home />} />
+        </Route>
+
+        <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}>
+          <Route path='editor' element={<Editor />} />
+          <Route />
+
+          <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+            <Route path='admin' element={<Admin />} />
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}>
-            <Route path='editor' element={<Editor />} />
-            <Route />
-
-            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
-              <Route path='admin' element={<Admin />} />
-            </Route>
-
-            <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
-              <Route path='lounge' element={<Lounge />} />
-            </Route>
+          <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
+            <Route path='lounge' element={<Lounge />} />
           </Route>
+        </Route>
         </Route>
 
         {/* No matches router */}
