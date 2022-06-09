@@ -10,7 +10,6 @@ const Users = () => {
   const location = useLocation();
 
   useEffect(() => {
-    let isMounted = true;
     // to cancel request if component unmounts
     const controller = new AbortController();
 
@@ -20,16 +19,18 @@ const Users = () => {
           signal: controller.signal,
         });
         console.log(response.data);
-        isMounted && setUsers(response.data);
+        setUsers(response.data);
       } catch (err) {
         console.error(err);
+      
         navigate('/login', { state: { from: location }, replace: true });
       }
-      getUsers();
-    };
+    }
+
+    getUsers();
 
     return () => {
-      isMounted = false;
+    //   isMounted = false;
       controller.abort();
     };
   }, [axiosPrivate, location, navigate]);
