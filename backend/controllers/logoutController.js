@@ -15,7 +15,7 @@ const handleLogout = async (req, res) => {
   }
 
   // Delete refreshToken in db
-  existingUser.refreshToken = '';
+  existingUser.refreshToken = existingUser.refreshToken.filter((rt) => rt !== refreshToken);
   const result = await existingUser.save();
   console.log(result);
 

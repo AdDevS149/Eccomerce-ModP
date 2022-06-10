@@ -10,32 +10,33 @@ const Users = () => {
   const location = useLocation();
 
   useEffect(() => {
+    // let isMounted = true;
     // to cancel request if component unmounts
     const controller = new AbortController();
 
     const getUsers = async () => {
       try {
         const response = await axiosPrivate.get('/users', {
-          signal: controller.signal,
+           signal: controller.signal,
         });
 
-        const userNames = response.data.map(user => user.username)
-        console.log(response.data);
+        const userNames = response.data.map((user) => user.username);
+        // console.log(response.data);
         setUsers(userNames);
       } catch (err) {
         console.error(err);
-      
+
         navigate('/login', { state: { from: location }, replace: true });
       }
-    }
+    };
 
     getUsers();
 
     return () => {
-    //   isMounted = false;
+      // isMounted = false;
       controller.abort();
     };
-  }, [axiosPrivate, location, navigate]);
+  }, []);
 
   return (
     <article>

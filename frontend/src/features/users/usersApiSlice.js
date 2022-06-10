@@ -1,34 +1,17 @@
-// import { useGetUsersQuery } from "./usersApiSlice"
-// import { Link } from "react-router-dom";
+import { apiSlice } from "../../app/api/apiSlice"
 
-// const UsersList = () => {
-//     const {
-//         data: users,
-//         isLoading,
-//         isSuccess,
-//         isError,
-//         error
-//     } = useGetUsersQuery()
+export const usersApiSlice = apiSlice.injectEndpoints({
+    endpoints: builder => ({
+        getUsers: builder.query({
+            query: () => '/users',
+            keepUnusedDataFor: 5,
+        })
+    })
+})
 
-//     let content;
-//     if (isLoading) {
-//         content = <p>"Loading..."</p>;
-//     } else if (isSuccess) {
-//         content = (
-//             <section className="users">
-//                 <h1>Users List</h1>
-//                 <ul>
-//                     {users.map((user, i) => {
-//                         return <li key={i}>{user.username}</li>
-//                     })}
-//                 </ul>
-//                 <Link to="/welcome">Back to Welcome</Link>
-//             </section>
-//         )
-//     } else if (isError) {
-//         content = <p>{JSON.stringify(error)}</p>;
-//     }
+export const {
+    useGetUsersQuery
+} = usersApiSlice 
 
-//     return content
-// }
-// export default UsersList
+
+
