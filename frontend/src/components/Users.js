@@ -10,7 +10,7 @@ const Users = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // let isMounted = true;
+
     // to cancel request if component unmounts
     const controller = new AbortController();
 
@@ -33,7 +33,7 @@ const Users = () => {
     getUsers();
 
     return () => {
-      // isMounted = false;
+    
       controller.abort();
     };
   }, []);
