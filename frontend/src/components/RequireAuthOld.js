@@ -3,6 +3,8 @@ import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import jwt_decode from 'jwt-decode'
 
+// use this for protected routes
+
 const RequireAuth = ({ allowedRoles }) => {
     const { auth } = useAuth();
     const location = useLocation();

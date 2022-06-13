@@ -10,22 +10,23 @@ const handleRefreshToken = async (req, res) => {
   const existingUser = await User.findOne({ refreshToken }).exec();
 
   // Detected refresh token reuse
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
-    if (err) return res.sendStatus(403);
-    console.log('attempte refresh token reuse!')
-    const hackedUser = await User.findOne({ username: decoded.username }).exec();
-    hackedUser.refreshToken = [];
-    const result = await hackedUser.save();
-    console.log(result);
-  });
-
-  if (!existingUser) return res.sendStatus(403); //Forbidden
+  if (existingUser) {
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
+      if (err) return res.sendStatus(403);
+      console.log('attempte refresh token reuse!');
+      const hackedUser = await User.findOne({ username: decoded.username }).exec();
+      hackedUser.refreshToken = [];
+      const result = await hackedUser.save();
+      console.log(result);
+    });
+    // if (!existingUser) return res.sendStatus(403); //Forbidden
+    return res.sendStatus(403);
+  }
 
   const newRefreshTokenArray = existingUser.refreshToken.filter((rt) => rt !== refreshToken);
 
   // evaluate jwt
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, 
-    async (err, decoded) => {
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
     if (err) {
       existingUser.refreshToken = [...newRefreshTokenArray];
       const result = await existingUser.save();
@@ -42,7 +43,7 @@ const handleRefreshToken = async (req, res) => {
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '15s' }
+      { expiresIn: '30s' }
     );
 
     const newRefreshToken = jwt.sign({ username: existingUser.username }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });

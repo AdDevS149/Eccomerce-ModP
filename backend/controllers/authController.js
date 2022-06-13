@@ -24,19 +24,12 @@ const handleLogin = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: '10s' }
     );
-    const newRefreshToken = jwt.sign(
-      { username: existingUser.username }, 
-      process.env.REFRESH_TOKEN_SECRET, 
-      { expiresIn: '1d' });
+    const newRefreshToken = jwt.sign({ username: existingUser.username }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
 
-      // Changed to let keyword
-      let newRefreshTokenArray =
-      !cookies?.jwt
-          ? existingUser.refreshToken
-          : existingUser.refreshToken.filter(rt => rt !== cookies.jwt);
+    // Changed to let keyword
+    let newRefreshTokenArray = !cookies?.jwt ? existingUser.refreshToken : existingUser.refreshToken.filter((rt) => rt !== cookies.jwt);
 
-  if (cookies?.jwt) {
-
+    if (cookies?.jwt) {
       /* 
       Scenario added here: 
           1) User logs in but never uses RT and does not logout 
@@ -48,17 +41,13 @@ const handleLogin = async (req, res) => {
 
       // Detected refresh token reuse!
       if (!foundToken) {
-          console.log('attempted refresh token reuse at login!')
-          // clear out ALL previous refresh tokens
-          newRefreshTokenArray = [];
+        console.log('attempted refresh token reuse at login!');
+        // clear out ALL previous refresh tokens
+        newRefreshTokenArray = [];
       }
 
       res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
-  }
-
-
-
-
+    }
 
     // Saving refreshToken with current user
     existingUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];

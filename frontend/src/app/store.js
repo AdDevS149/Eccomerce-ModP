@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from './api/apiSlice';
-import authReducer from '../features/auth/authReduxSlice';
+import authReducer from '../features/auth/authSlice';
 
 export const store = configureStore({
   reducer: {
@@ -9,5 +9,6 @@ export const store = configureStore({
   },
   // need to rtk query to cache resutts, etc
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+  // change to false when go into production
   devTools: true,
 });
