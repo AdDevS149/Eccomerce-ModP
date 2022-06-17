@@ -14,7 +14,7 @@ const Welcome = () => {
             <h1>{welcome}</h1>
             <p>Token: {tokenAbbr}</p>
             <p><Link to="/userslist">Go to the Users List</Link></p>
-            <button>Logout</button>
+          
         </section>
         
     )

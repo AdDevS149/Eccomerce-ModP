@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate, /*useLocation*/ } from 'react-router-dom';
+import {toast} from 'react-toastify'
 
 import { useDispatch } from 'react-redux';
 import { setCredentials } from './authSlice';
@@ -9,6 +10,64 @@ import useInput from '../../hooks/useInput';
 import useToggle from '../../hooks/useToggle';
 
 import { FaSignInAlt } from 'react-icons/fa';
+// import { Container } from '@mui/system';
+
+import styled from "styled-components";
+import { mobile } from '../../responsive';
+
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("")
+      center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Wrapper = styled.div`
+  width: 25%;
+  padding: 20px;
+  background-color: white;
+  ${mobile({ width: "75%" })}
+`;
+
+const Title = styled.h1`
+  font-size: 24px;
+  font-weight: 300;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Input = styled.input`
+  flex: 1;
+  min-width: 40%;
+  margin: 10px 0;
+  padding: 10px;
+`;
+
+const Button = styled.button`
+  width: 40%;
+  border: none;
+  padding: 15px 20px;
+  background-color: teal;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 10px;
+  &:disabled {
+    color: green;
+    cursor: not-allowed;
+  }
+`;
+
 
 const Login = () => {
   const userRef = useRef();
@@ -45,6 +104,7 @@ const Login = () => {
       const userData = await login({ user, pwd }).unwrap();
       //getting access token here
       dispatch(setCredentials({ ...userData, user }));
+      toast.success('Login successful!');
       // setAuth({ user, accessToken });
       // setUser('')
       resetUser('');
@@ -52,14 +112,17 @@ const Login = () => {
       navigate('/welcome');
     } catch (err) {
       if (!err.originalStatus === 400) {
-        //Use toast (toast.error(yadayadayads))
-        setErrMsg('No Server Response');
+        toast.error("No Server Response")
+        // setErrMsg('No Server Response');
       } else if (err.originalStatus === 400) {
-        setErrMsg('Missing Username or Password');
+        toast.error('Missing Username or Password')
+        // setErrMsg('Missing Username or Password');
       } else if (err.originalStatus === 401) {
-        setErrMsg('Unauthorized');
+        toast.error("Unauthorized!")
+        // setErrMsg('Unauthorized');
       } else {
-        setErrMsg('Login Failed');
+        toast.error('Login Failed')
+        // setErrMsg('Login Failed');
       }
       errRef.current.focus();
     }
@@ -68,36 +131,61 @@ const Login = () => {
   const userInputHandler = (e) => resetUser(e.target.value);
   const pwdInputHandler = (e) => setPwd(e.target.value);
 
-  const content = isLoading ? (
+  const content = 
+  
+  isLoading ? (
     // put loading spinner later
     
     <h1>Loading...</h1>
   ) : (
     <>
+      <Container> 
+      <Wrapper>   
       <section className='form'>
         <p ref={errRef} className={errMsg ? 'errmsg' : 'offscreen'} aria-live='assertive'>
           {errMsg}
         </p>
-        <h1>
+        <Title>
           <FaSignInAlt />
           Login In
-        </h1>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor='username'>Username:</label>
-          <div className='form-group'>
-            <input type='text' className='form-control' id='username' name='username' ref={userRef} value={user} onChange={userInputHandler} autoComplete='off' {...userAttribs} required />
-          </div>
-          <label htmlFor='password'>Password:</label>
-          <div className='form-group'>
-            <input type='password' className='form-control' id='password' name='password' value={pwd} onChange={pwdInputHandler} required />
-          </div>
-          <button>Sign In</button>
+        </Title>
+        <Form onSubmit={handleSubmit}>
+      
+          {/* <label htmlFor='username'>Username:</label> */}
+         
+            <Input 
+            type='text' 
+            // className='form-control' 
+            placeholder='username'
+            id='username' 
+            name='username' 
+            ref={userRef} 
+            value={user} 
+            onChange={userInputHandler}
+            autoComplete='off' 
+            {...userAttribs} 
+            required />
+            {/* <Button></Button> */}
+
+
+         
+          {/* <label htmlFor='password'>Password:</label> */}
+            <Input 
+            type='password' 
+            className='form-control' 
+            id='password' 
+            name='password' 
+            value={pwd} 
+            onChange={pwdInputHandler} 
+            required />
+
+          <Button onSubmit={handleSubmit} disabled={isLoading}>Sign In</Button>
+
           <div className='persistCheck'>
             <input type='checkbox' id='persist' onChange={toggleCheck} checked={check} />
             <label htmlFor='persist'>Trust This Device</label>
           </div>
-        </form>
-
+        </Form>
         <p>
           Need an Account?
           <br />
@@ -106,7 +194,11 @@ const Login = () => {
           </span>
         </p>
       </section>
+      </Wrapper>
+       </Container>
     </>
+
+   
   );
 
   return content;

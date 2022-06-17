@@ -49,7 +49,10 @@ app.use('/auth', require('./routes/auth'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/logout', require('./routes/logout'));
 
-app.use(verifyJWT);
+
+
+
+// app.use(verifyJWT);
 app.use('/products', require('./routes/api/productApi'));
 app.use('/users', require('./routes/api/usersApi'));
 
