@@ -64,11 +64,11 @@ decreaseCart(state, action) {
     removeFromCart(state, action) {
       state.cartItems.map((cartItem) => {
         if (cartItem._id === action.payload._id) {
-          const nextCartItems = state.cartItems.filter(
+          const toDeleteCartItem = state.cartItems.filter(
             (item) => item._id !== cartItem._id
           );
 
-          state.cartItems = nextCartItems;
+          state.cartItems = toDeleteCartItem;
 
           toast.error("Product removed from cart", {
             position: "bottom-left",

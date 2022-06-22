@@ -1,6 +1,6 @@
 // import {useState} from 'react'
 // import ProductItem from './ProductItem'
-// import EditProduct from './EditProductForm'
+// import EditProduct from './EditPostForm'
 // import {useDeleteProductMutation} from '../../services/productApi'
 // import {useUpdateProductMutation} from '../../services/productApi'
 

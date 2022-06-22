@@ -1,28 +1,25 @@
-import { useGetUsersQuery } from './usersApiSlice';
-import { Link } from 'react-router-dom';
+
+
+import { useSelector } from 'react-redux'
+import { selectAllUsers } from './usersSlice'
+import { Link } from 'react-router-dom'
 
 const UsersList = () => {
-  const { data: users, isLoading, isSuccess, isError, error } = useGetUsersQuery();
+    const users = useSelector(selectAllUsers)
 
-  let content;
-  if (isLoading) {
-    content = <p>"Loading..."</p>;
-  } else if (isSuccess) {
-    content = (
-      <section className='users'>
-        <h1>Users List</h1>
-        <ul>
-          {users.map((user, i) => {
-            return <li key={i}>{user.username}</li>;
-          })}
-        </ul>
-        <Link to='/welcome'>Back to Welcome</Link>
-      </section>
-    );
-  } else if (isError) {
-    content = <p>{JSON.stringify(error)}</p>;
-  }
+    const renderedUsers = users.map(user => (
+        <li key={user.id}>
+            <Link to={`/user/${user.id}`}>{user.name}</Link>
+        </li>
+    ))
 
-  return content;
-};
-export default UsersList;
+    return (
+        <section>
+            <h2>Users</h2>
+
+            <ul>{renderedUsers}</ul>
+        </section>
+    )
+}
+
+export default UsersList

@@ -1,15 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { apiSlice } from './api/apiSlice';
-import authReducer from '../features/auth/authSlice';
-// import { productsApi } from '../services/productApi';
+import { apiSlice } from '../features/api/apiSlice';
+import cartReducer from '../features/cart/cartSlice';
+import authReducer from '../features/auth/authSlice'
 
 export const store = configureStore({
   reducer: {
-    [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
+    cart: cartReducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
-  // need to rtk query to cache resutts, etc
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
-  // change to false when go into production
   devTools: true,
 });
+
+// store.dispatch(loadUser(null))

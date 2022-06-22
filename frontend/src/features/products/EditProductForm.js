@@ -1,55 +1,85 @@
-// import Modal from "../../Modal"
-// import {useState} from 'react'
-// import {useUpdateProductMutation} from '../../services/productApi'
+// import React, { useState } from 'react'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { useNavigate } from 'react-router-dom'
 
-// function EditProduct({open, onClose, toEditTitle, toEditDescription, id}) {
+// import { productUpdated } from './productsSlice'
 
-//   const [title, setTitle] = useState(toEditTitle)
-//   const [description, setDescription] = useState(toEditDescription)
-//   const [updateProduct] = useUpdateProductMutation()
+// const EditProductForm = ({ match }) => {
+//   const { productId } = match.params
 
-//   const handleUpdateProduct = (e) => {
-//     e.preventDefault()
-//     const product = {
-//       title,
-//       description,
-//       featured: false,
-//       id
+//   const product = useSelector(state =>
+//     state.products.find(product => product.id === productId)
+//   )
+
+//   const [title, setTitle] = useState(product.title)
+//   const [content, setContent] = useState(product.content)
+
+//   const dispatch = useDispatch()
+//   const navigate = useNavigate()
+
+//   const onTitleChanged = e => setTitle(e.target.value)
+//   const onContentChanged = e => setContent(e.target.value)
+
+//   const onSaveProductClicked = () => {
+//     if (title && content) {
+//       dispatch(productUpdated({ id: productId, title, content }))
+//       navigate(`/products/${productId}`)
 //     }
-//     updateProduct(product)
-//     onClose()
 //   }
 
 //   return (
-//     <Modal modalLable='Edit Product' onClose={onClose} open={open}>
-//       <form className='editProduct' name='updateProduct' onSubmit={handleUpdateProduct}>
+//     <section>
+//       <h2>Edit Product</h2>
+//       <form>
+//         <label htmlFor="productTitle">Product Title:</label>
 //         <input
-//           type='text'
-//           name='title'
-//           onChange={(e) => setTitle(e.target.value.toUpperCase())} 
-//           value={title}/>
-//         <textarea onChange={(e) => setDescription(e.target.value)} value={description}></textarea>
-//         <button type='submit'>Edit</button>
+//           type="text"
+//           id="productTitle"
+//           name="productTitle"
+//           placeholder="What's on your mind?"
+//           value={title}
+//           onChange={onTitleChanged}
+//         />
+//         <label htmlFor="productContent">Content:</label>
+//         <textarea
+//           id="productContent"
+//           name="productContent"
+//           value={content}
+//           onChange={onContentChanged}
+//         />
 //       </form>
-//     </Modal>
+//       <button type="button" onClick={onSaveProductClicked}>
+//         Save Product
+//       </button>
+//     </section>
 //   )
 // }
 
-// export default EditProduct
+// export default EditProductForm
+
+
+
+
+
+
 
 
 
 
 // // import { useState } from 'react'
-// // import { useDispatch, useSelector } from 'react-redux'
-// // import { selectPostById, updatePost, deletePost } from './productsSlice'
+// // import { useSelector } from 'react-redux'
+// // import { selectPostById } from './postsSlice'
 // // import { useParams, useNavigate } from 'react-router-dom'
 
 // // import { selectAllUsers } from "../users/usersSlice";
+// // import { useUpdatePostMutation, useDeletePostMutation } from "./postsSlice";
 
-// // const EditProductForm = () => {
+// // const EditPostForm = () => {
 // //     const { postId } = useParams()
 // //     const navigate = useNavigate()
+
+// //     const [updatePost, { isLoading }] = useUpdatePostMutation()
+// //     const [deletePost] = useDeletePostMutation()
 
 // //     const post = useSelector((state) => selectPostById(state, Number(postId)))
 // //     const users = useSelector(selectAllUsers)
@@ -57,9 +87,6 @@
 // //     const [title, setTitle] = useState(post?.title)
 // //     const [content, setContent] = useState(post?.body)
 // //     const [userId, setUserId] = useState(post?.userId)
-// //     const [requestStatus, setRequestStatus] = useState('idle')
-
-// //     const dispatch = useDispatch()
 
 // //     if (!post) {
 // //         return (
@@ -73,13 +100,12 @@
 // //     const onContentChanged = e => setContent(e.target.value)
 // //     const onAuthorChanged = e => setUserId(Number(e.target.value))
 
-// //     const canSave = [title, content, userId].every(Boolean) && requestStatus === 'idle';
+// //     const canSave = [title, content, userId].every(Boolean) && !isLoading;
 
-// //     const onSavePostClicked = () => {
+// //     const onSavePostClicked = async () => {
 // //         if (canSave) {
 // //             try {
-// //                 setRequestStatus('pending')
-// //                 dispatch(updatePost({ id: post.id, title, body: content, userId, reactions: post.reactions })).unwrap()
+// //                 await updatePost({ id: post.id, title, body: content, userId }).unwrap()
 
 // //                 setTitle('')
 // //                 setContent('')
@@ -87,8 +113,6 @@
 // //                 navigate(`/post/${postId}`)
 // //             } catch (err) {
 // //                 console.error('Failed to save the post', err)
-// //             } finally {
-// //                 setRequestStatus('idle')
 // //             }
 // //         }
 // //     }
@@ -100,10 +124,9 @@
 // //         >{user.name}</option>
 // //     ))
 
-// //     const onDeletePostClicked = () => {
+// //     const onDeletePostClicked = async () => {
 // //         try {
-// //             setRequestStatus('pending')
-// //             dispatch(deletePost({ id: post.id })).unwrap()
+// //             await deletePost({ id: post.id }).unwrap()
 
 // //             setTitle('')
 // //             setContent('')
@@ -111,8 +134,6 @@
 // //             navigate('/')
 // //         } catch (err) {
 // //             console.error('Failed to delete the post', err)
-// //         } finally {
-// //             setRequestStatus('idle')
 // //         }
 // //     }
 
@@ -158,4 +179,4 @@
 // //     )
 // // }
 
-// // export default EditProductForm
+// // export default EditPostForm

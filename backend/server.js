@@ -7,12 +7,18 @@ const path = require('path');
 
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
-const { logger } = require('./middleware/logEvents');
-const errorHandler = require('./middleware/errorHandler');
-const verifyJWT = require('./middleware/verifyJWT');
+// const { logger } = require('./middleware/logEvents');
+// const errorHandler = require('./middleware/errorHandler');
+// const verifyJWT = require('./middleware/verifyJWT');
 const cookieParser = require('cookie-parser');
-const credentials = require('./middleware/credentials');
+// const credentials = require('./middleware/credentials');
 const mongoose = require('mongoose');
+const register = require('./routes/register')
+const login = require('./routes/login')
+const stripe = require('./routes/stripe')
+
+
+
 const connectDB = require('./config/db');
 const PORT = process.env.PORT || 4000;
 
@@ -21,11 +27,11 @@ const PORT = process.env.PORT || 4000;
 connectDB();
 
 // custom middleware logger
-app.use(logger);
+// app.use(logger);
 
 // Handle options credentials check - before CORS!
 // and fetch cookies credentials requirement
-app.use(credentials);
+// app.use(credentials);
 
 // Cross Origin Resource Sharing
 app.use(cors(corsOptions));
@@ -44,17 +50,20 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 
 // routes
 app.use('/', require('./routes/root'));
-app.use('/register', require('./routes/register'));
-app.use('/auth', require('./routes/auth'));
-app.use('/refresh', require('./routes/refresh'));
-app.use('/logout', require('./routes/logout'));
+// app.use('/register', require('./routes/register'));
+app.use('/api/register', register);
+app.use('/api/login', login);
+app.use('/api/stripe', stripe);
+// app.use('/auth', require('./routes/auth'));
+// app.use('/refresh', require('./routes/refresh'));
+// app.use('/logout', require('./routes/logout'));
 
 
 
 
 // app.use(verifyJWT);
 app.use('/products', require('./routes/api/productApi'));
-app.use('/users', require('./routes/api/usersApi'));
+// app.use('/users', require('./routes/api/usersApi'));
 
 app.all('*', (req, res) => {
     res.status(404);
@@ -67,7 +76,7 @@ app.all('*', (req, res) => {
     }
 });
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
