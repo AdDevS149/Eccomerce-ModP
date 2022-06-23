@@ -55,10 +55,10 @@ const Cart = () => {
               cart.cartItems.map((cartItem) => (
                 <div className='cart-item' key={cartItem._id}>
                   <div className='cart-product'>
-                    <img src={cartItem.image} alt={cartItem.title} />
+                    <img src={cartItem.image} alt={cartItem.item} />
                     <div>
-                      <h3>{cartItem.name}</h3>
-                      <p>{cartItem.desc}</p>
+                      <h3>{cartItem.item}</h3>
+                      <p>{cartItem.description}</p>
                       <button onClick={() => handleRemoveFromCart(cartItem)}>Remove</button>
                     </div>
                   </div>

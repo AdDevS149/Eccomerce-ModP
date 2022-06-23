@@ -1,50 +1,50 @@
 const mongoose = require('mongoose');
 
-const productSchema = mongoose.Schema({
-  urlName: {
-    type: String,
-    required: [true, 'Please add an url value'],
-  },
+const productSchema = mongoose.Schema(
+  {
+    urlName: {
+      type: String,
+      required: [true, 'Please add an url value'],
+    },
 
-  item: {
-    type: String,
-    required: [true, 'Please add an item value'],
-  },
+    item: {
+      type: String,
+      required: [true, 'Please add an item value'],
+    },
 
-  image: {
-    type: String,
-    required: [true, 'Please add an image'],
-  },
+    image: {
+      type: String,
+      required: [true, 'Please add an image'],
+    },
 
-  price: {
-    type: Number,
-    required: [true, 'Please add a price value'],
-  },
+    price: {
+      type: Number,
+      required: [true, 'Please add a price value'],
+    },
 
-  description: {
-    type: String,
-    required: [true, 'Please add a description'],
+    description: {
+      type: String,
+      required: [true, 'Please add a description'],
+    },
+    featured: {
+      type: Boolean,
+      required: [true, 'Indicate if featured or not'],
+    },
+    qty: {
+      type: Number,
+      // required: [true, 'Please add a number value'],
+    },
+    inStock: {
+      type: Number,
+      required: [true, 'Please amount in stock'],
+    },
   },
-  featured: {
-    type: Boolean,
-    required: [true, 'Indicate if featured or not'],
-  },
-  qty: {
-    type: Number,
-    // required: [true, 'Please add a number value'],
-  },
-  inStock: {
-    type: Number,
-    required: [true, 'Please amount in stock'],
+  {
+    timestamps: true,
   }
-
-}, {
-  timestamps: true
-});
+);
 
 module.exports = mongoose.model('Product', productSchema);
-
-
 
 // const mongoose = require('mongoose');
 // const Schema = mongoose.Schema;
@@ -61,10 +61,6 @@ module.exports = mongoose.model('Product', productSchema);
 // });
 
 // module.exports = mongoose.model('Product', productSchema);
-
-
-
-
 
 // const mongoose = require('mongoose');
 
@@ -116,5 +112,3 @@ module.exports = mongoose.model('Product', productSchema);
 // });
 
 // module.exports = mongoose.model('Product', productSchema);
-
-
