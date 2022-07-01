@@ -1,3 +1,97 @@
+const User = require('../models/userModel');
+const ErrorResponse = require('../utils/errorResponse');
+
+exports.signup = async (req, res, next) => {
+  const { email } = req.body;
+  const userExist = await User.findOne({ email });
+
+  if (userExist) {
+    return next(new ErrorResponse('E-mail already exists', 400));
+  }
+
+  try {
+    const user = await User.create(req.body);
+    res.status(201).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.signin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return next(new ErrorResponse('E-mail and password are required', 400));
+    }
+
+    // check user e-mail
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(new ErrorResponse('Invalid credentials', 400));
+    }
+
+    // verify user password
+    const isMatched = await user.comparePassword(password);
+    if (!isMatched) {
+      return next(new ErrorResponse('Invalid credentials', 400));
+    }
+
+    // generateToken(user, 200, res);
+
+    sendTokenResponse(user, 200, res);
+  } catch (error) {
+    console.log(error);
+
+    next(new ErrorResponse('Cannot log in, check your credentials', 400));
+  }
+};
+
+const sendTokenResponse = async (user, statusCode, res) => {
+  const token = await user.getJwtToken();
+
+  const options = {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+    // expires: new Date(Date.now() + process.env.EXPIRE_TOKEN),
+  };
+
+  res.status(statusCode).cookie('token', token, options).json({ success: true, token });
+};
+
+//LOG OUT USER
+exports.logout = (req, res, next) => {
+  res.clearCookie('token');
+  res.status(200).json({
+    success: true,
+    message: 'Logged out',
+  });
+};
+
+exports.singleUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// USER PROFILE
+exports.userProfile = async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  res.status(200).json({
+    success: true,
+    user,
+  });
+};
+
 // const User = require('../models/User');
 // const bcrypt = require('bcrypt');
 // const jwt = require('jsonwebtoken');
@@ -30,9 +124,9 @@
 //     let newRefreshTokenArray = !cookies?.jwt ? existingUser.refreshToken : existingUser.refreshToken.filter((rt) => rt !== cookies.jwt);
 
 //     if (cookies?.jwt) {
-//       /* 
-//       Scenario added here: 
-//           1) User logs in but never uses RT and does not logout 
+//       /*
+//       Scenario added here:
+//           1) User logs in but never uses RT and does not logout
 //           2) RT is stolen
 //           3) If 1 & 2, reuse detection is needed to clear all RTs when user logs in
 //       */

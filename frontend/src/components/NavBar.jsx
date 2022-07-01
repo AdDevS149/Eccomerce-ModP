@@ -1,21 +1,35 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../features/auth/authSlice';
+import { Link, useNavigate} from 'react-router-dom';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { logoutUser } from '../features/auth/authSlice';
 import styled from 'styled-components';
+import axios from 'axios'
 import { toast } from 'react-toastify'
 
+
 const NavBar = () => {
-  const { cartTotalQuantity } = useSelector((state) => state.cart);
-  const auth = useSelector((state) => state.auth); 
-  const dispatch = useDispatch();
+
+  // const { cartTotalQuantity } = useSelector((state) => state.cart);
+  // const auth = useSelector((state) => state.auth); 
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
 
-  const logoutHandler = () => {
-    dispatch(logoutUser(null));
-    toast.warning("Logged Out", {position: 'bottom-right'})
-    navigate('/');
-  };
+  // const logoutHandler = () => {
+  //   dispatch(logoutUser(null));
+  //   toast.warning("Logged Out", {position: 'bottom-right'})
+  //   navigate('/');
+  // };
+
+  const logout = () => {
+axios.get('/api/logout').then(result => {
+  toast.success("Log out successful")
+  localStorage.removeItem('token')
+  navigate('/')
+})
+.catch(error => {
+  console.log(error)
+})
+  }
 
   return (
     <nav className='nav-bar'>
@@ -30,19 +44,27 @@ const NavBar = () => {
             <path d='M8 1a2 2 0 0 0-2 2v2H5V3a3 3 0 1 1 6 0v2h-1V3a2 2 0 0 0-2-2zM5 5H3.36a1.5 1.5 0 0 0-1.483 1.277L.85 13.13A2.5 2.5 0 0 0 3.322 16h9.355a2.5 2.5 0 0 0 2.473-2.87l-1.028-6.853A1.5 1.5 0 0 0 12.64 5H11v1.5a.5.5 0 0 1-1 0V5H6v1.5a.5.5 0 0 1-1 0V5z' />
           </svg>
           <span className='bag-quantity'>
-            <span>{cartTotalQuantity}</span>
+            {/* <span>{cartTotalQuantity}</span> */}
           </span>
         </div>
       </Link>
 
-      {auth._id ? (
-        <Logout onClick={logoutHandler}>LogOut</Logout>
-      ) : (
+      {/* {auth._id ? ( */}
+        <Links> 
+        <div>
+          <Link to="/user/dashboard">Admin</Link>
+        </div>
+        {/* <div onClick={logoutHandler}>
+        LogOut
+        </div> */}
+        </Links>
+      {/* ) : ( */}
         <AuthLinks>
-          <Link to='login'>Login</Link>
-          <Link to='register'>Register</Link>`
+          <Link to='/signin'>Sign In</Link>
+          <Link to='/signup'>Sign Up</Link>
+          <Link to='/signup' onClick={logout}>Logout</Link>
         </AuthLinks>
-      )}
+      {/* )} */}
     </nav>
   );
 };
@@ -56,9 +78,18 @@ a{
   }
 }`;
 
-const Logout = styled.div`
+const Links = styled.div`
   color: white;
-  cursor: pointer;
+  display: flex;
+
+  div {
+
+cursor: pointer;    
+&:last-child {
+  margin-left: 2rem;
+}
+  }
+  
 `;
 
 // import { Link } from 'react-router-dom';

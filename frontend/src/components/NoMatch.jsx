@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
 
 const NoMatch = () => {
-    return (
-        <article style={{ padding: "100px" }}>
-            <h1>Oops!</h1>
-            <p>Page Not Found</p>
-            <div className="flexGrow">
-                <Link to="/">Back To Homepage</Link>
-            </div>
-        </article>
-    )
-}
+  return (
+    <article style={{ padding: '100px' }}>
+      <h1>Oops!</h1>
+      <p>Page Not Found</p>
+      <div className='flexGrow'>
+        <Link to='/'>Back To Homepage</Link>
+      </div>
+    </article>
+  );
+};
 
-export default NoMatch
+export default NoMatch;
