@@ -5,13 +5,14 @@ const path = require('path');
 
 exports.createProduct = async (req, res, next) => {
   try {
-    const result = await cloudinary.uploader.upload(image, {
-      upload_preset: 'Mod-Prods',
-      // public_id: "Mod-Prods",
-      // use_filename: true,
-      // unique_filename: false
-    });
-    const { name, description, price, countStock, image, category } = req.body;
+    // const result = await cloudinary.uploader.upload(req.file.path, {
+    //     folder: "mern",
+    //     // public_id: "product_id",
+    //     use_filename: true,
+    //     unique_filename: false
+
+    // });
+    const { name, description, price, countStock, avatar, category } = req.body;
 
     const product = await Product.create({
       name,
@@ -19,8 +20,9 @@ exports.createProduct = async (req, res, next) => {
       price,
       countStock,
       category,
-      image: uploadedResponse,
-    
+      avatar,
+      // avatar: result.secure_url,
+      // cloudinary_id: result.public_id
     });
 
     res.status(200).json({
@@ -31,36 +33,6 @@ exports.createProduct = async (req, res, next) => {
     next(err);
   }
 };
-
-// exports.createProduct = async (req, res, next) => {
-//     const { name, description, price, countStock, image, category } = req.body;
-//   try {
-//     if (image) {
-//     const uploadedResponse = await cloudinary.uploader.upload(image, {
-//       upload_preset: "Mod-Prods",
-//     });
-
-//     if (uploadedResponse) {
-//    const product = await Product.create({
-//       name,
-//       description,
-//       price,
-//       countStock,
-//       category,
-//       image: uploadedResponse,
-
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       product,
-//     }
-//   }
-// } catch (error) {
-//     next(erorr)
-//   }
-
-//   })
 
 exports.allProducts = async (req, res, next) => {
   // enable search

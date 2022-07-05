@@ -12,4 +12,11 @@ const categorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Return JWT token
+// categorySchema.methods.getJwtToken = function () {
+//     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+//         expiresIn: 3600
+//     });
+// }
+
 module.exports = mongoose.model('Category', categorySchema);
