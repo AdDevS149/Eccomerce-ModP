@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { productDelete } from '../../../slices/productsSlice';
+import { productDelete } from '../../../features/products/productsSlice';
 import EditProduct from '../EditProduct';
 
 export default function ProductsList() {

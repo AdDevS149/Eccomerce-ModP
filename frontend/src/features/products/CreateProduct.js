@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { PrimaryButton } from "./CommonStyled";
-import { productsCreate } from "../../slices/productsSlice";
+import { PrimaryButton } from "../../components/admin/CommonStyled";
+// import { productsCreate } from "../../slices/productsSlice";
+
+import { useAddNewProductMutation } from "./productsSlice";
 
 const CreateProduct = () => {
-  const dispatch = useDispatch();
-  const { createStatus } = useSelector((state) => state.products);
+const [addNewProduct, {isLoading}] = useAddNewProductMutation
+  // const dispatch = useDispatch();
+  // const { createStatus } = useSelector((state) => state.products);
 
 
 
@@ -15,6 +19,8 @@ const CreateProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [desc, setDesc] = useState("");
+
+
 
   const handleProductImageUpload = (e) => {
     const file = e.target.files[0];
@@ -35,23 +41,31 @@ const CreateProduct = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const canSave = [name, brand, price, desc, productImg].every(Boolean) && !isLoading
 
-    dispatch(
-      productsCreate({
-        name,
-        brand,
-        price,
-        desc,
-        image: productImg,
-      })
-    );
-  };
+  const onSaveButton = async () => {
+if (canSave) {
+  try {
+
+  
+ await addNewProduct({name, brand, price, desc, image: productImg}).unwrap()
+
+ setName("")
+ setBrand("")
+ setPrice("")
+ setDesc("")
+ setProductImg("")
+//  navigate('/')
+} catch (err) {
+  console.error('Failed to save Product', err)
+}
+}
+  } 
+  
 
   return (
     <StyledCreateProduct>
-      <StyledForm onSubmit={handleSubmit}>
+      <StyledForm>
         <h3>Create a Product</h3>
         <input
           id="imgUpload"
@@ -86,8 +100,8 @@ const CreateProduct = () => {
           required
         />
 
-        <PrimaryButton type="submit">
-          {createStatus === "pending" ? "Submitting" : "Submit"}
+        <PrimaryButton type="button">
+          onClick={onSaveButton}
         </PrimaryButton>
       </StyledForm>
       <ImagePreview>

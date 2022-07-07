@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { PrimaryButton } from "./CommonStyled";
-import { productsEdit } from "../../slices/productsSlice";
+import { productsEdit } from "../../features/products/productsSlice";
 
 export default function EditProduct({ prodId }) {
   const [open, setOpen] = React.useState(false);

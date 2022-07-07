@@ -1,0 +1,31 @@
+20220706	09:48:10	9562437e-6bce-4a43-bfe4-bfc9e86552f0	Error: Not allowed by CORS
+20220706	10:58:55	d9cd375c-8d4a-41f3-81b8-ebe343d7872d	SyntaxError: Unexpected token } in JSON at position 54
+20220706	11:00:57	fb7e1144-0903-4425-887b-b0092d1add76	SyntaxError: Unexpected token } in JSON at position 26
+20220706	11:29:43	b9ad5760-b6c5-4252-8493-09b93c0e0430	SyntaxError: Unexpected token } in JSON at position 23
+20220706	13:15:38	77aa1516-9633-475d-a758-bc2848d56186	TypeError: Cannot read properties of undefined (reading 'username')
+20220706	13:17:55	77628081-fe26-4c0f-bd06-b80bd9c978ce	TypeError: Cannot read properties of undefined (reading 'username')
+20220706	13:27:40	280d4750-c9f9-4a68-a2ce-9390544d6361	TypeError: Cannot read properties of undefined (reading 'username')
+20220706	13:30:52	e608b195-75cb-40fd-a696-6f1e21faa916	TypeError: Cannot read properties of undefined (reading 'username')
+20220706	22:49:44	81542e5c-fd07-48f5-aec3-98efe0c46b03	Error: Not allowed by CORS
+20220706	22:49:48	5d4d9d4d-16eb-4642-9c24-882b9ad316fd	Error: Not allowed by CORS
+20220706	22:57:03	aeb0f80e-7d8e-44bd-b497-251cf9b4b40e	Error: Not allowed by CORS
+20220706	22:57:35	fa72deeb-7cf3-405f-8938-2ce2cdcd5e52	Error: Not allowed by CORS
+20220706	22:58:32	d72bb3f9-5ce4-470b-b384-d186c1e73f89	Error: Not allowed by CORS
+20220706	22:58:38	b9daea16-0919-4497-be4b-76957db0d077	Error: Not allowed by CORS
+20220706	22:59:57	21bb1ae7-47d2-42e4-a1b9-8ca4c71d5b0b	Error: Not allowed by CORS
+20220706	23:04:07	f712a0fb-93e5-4900-9794-1bacd16e567e	Error: Not allowed by CORS
+20220706	23:04:50	8da731ed-822c-4765-b297-43e7a7969b73	Error: Not allowed by CORS
+20220706	23:04:52	25c52c56-18d7-4d44-a2c6-07e014b62f5b	Error: Not allowed by CORS
+20220706	23:04:59	1946bc5b-1cf0-483f-935c-cf96d0409c62	Error: Not allowed by CORS
+20220706	23:06:39	f950a21d-0808-4898-b24b-b325a9996025	Error: Not allowed by CORS
+20220706	23:19:37	85ef332a-98f8-4179-9940-f3de15ea048a	TypeError: Cannot read properties of undefined (reading 'username')
+20220706	23:20:20	9bf9b073-5b77-4da2-b9a3-f880a21ebbe1	TypeError: Cannot read properties of undefined (reading 'username')
+20220706	23:23:07	92f9f067-5499-487f-808b-51200488b093	TypeError: Cannot read properties of undefined (reading 'username')
+20220707	09:31:44	c057b3f6-6d13-49c2-9e53-4397b2a1be3a	TypeError: Cannot read properties of undefined (reading 'username')
+20220707	09:35:53	f42bf375-d2c7-4ffa-b4ff-d17e73b11b4c	TypeError: Cannot read properties of undefined (reading 'username')
+20220707	09:36:09	7a0b59e6-8609-4623-ba40-2a497fec8e35	TypeError: Cannot read properties of undefined (reading 'username')
+20220707	09:37:59	19f847ab-b8cb-45a0-bb49-5c83ee7706b5	TypeError: Cannot read properties of undefined (reading 'username')
+20220707	09:40:06	f48cc2ae-a43f-4286-a0cd-c6cd705df335	TypeError: Cannot read properties of undefined (reading 'username')
+20220707	09:40:17	39e2f584-fff5-4200-b676-7b2baf1544f9	TypeError: Cannot read properties of undefined (reading 'username')
+20220707	09:43:17	bc53b4ea-24f0-4917-bcc6-de6f12f198e9	TypeError: Cannot read properties of undefined (reading 'username')
+20220707	09:43:25	ae2889ce-fa4a-40e0-a24f-7b3fbc12d217	TypeError: Cannot read properties of undefined (reading 'username')
