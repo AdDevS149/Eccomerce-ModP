@@ -1,185 +1,169 @@
-// const { findById } = require('../models/orderModel');
-// const Order = require('../models/orderModel');
-// const Product = require('../models/productModel');
-// const ErrorResponse = require('../utils/errorResponse');
+const Order = require('../model/OrderModel');
 
+const { auth, isUser, isAdmin } = require('../middleware/auth');
+const moment = require('moment');
 
-// //display all orders
-// // exports.allOrders = async (req, res, next)=>{
+const router = require('express').Router();
 
-// //     try {
-// //         const orders = await Order.find().populate("user", "name").sort({createdAt: -1})
-// //         res.status(200).json({
-// //             success: true,
-// //             orders
-// //         })
-// //         next();
-// //     } catch (error) {
-// //         return next(new ErrorResponse('Server error', 500));
-// //     }
-// // }
+//CREATE
+// createOrder is fired by stripe webhook... check stripe.js
 
-// //display all orders with pagination
-// exports.allOrders = async (req, res, next)=>{
+//UPDATE
+const updateOrder = async (req, res) => {
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).send(updatedOrder);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-//     try {
-      
-//         const pageSize = 10;
-//         const page = Number(req.query.pageNumber) || 1;
+//DELETE
+const deleteOrder = async (req, res) => {
+  try {
+    await Order.findByIdAndDelete(req.params.id);
+    res.status(200).send('Order has been deleted...');
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-//         // const count = await Order.count();
-//         const count = await Order.find({}).estimatedDocumentCount();
+//GET USER ORDERS
+router.get('/find/:userId', isUser, async (req, res) => {
+  try {
+    const orders = await Order.find({ userId: req.params.userId });
+    res.status(200).send(orders);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
 
-//         const orders = await Order.find().populate("user", "name").sort({createdAt: -1})
-//                     .skip(pageSize * (page-1))
-//                     .limit(pageSize)
-     
+//GET ALL ORDERS
 
-//         res.status(200).json({
-//             success: true,
-//             orders, 
-//             page,
-//             pages: Math.ceil(count / pageSize),
-//             count,
-          
-//         })
-//         next();
-//     } catch (error) {
-//         return next(new ErrorResponse('Server error', 500));
-//     }
-// }
+getAllOrders = async (req, res) => {
+  const query = req.query.new;
 
+  try {
+    const orders = query
+      ? // -1 send latest transaction first
+        await Order.find().sort({ _id: -1 }).limit(4)
+      : await Order.find().sort({ _id: -1 });
+    res.status(200).send(orders);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
+// GET AN ORDER
+router.get('/findOne/:id', auth, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
 
-// //display my order
-// exports.ordersme = async (req, res, next)=>{
+    if (req.user._id !== order.userId || !req.user.isAdmin) return res.status(403).send('Access denied. Not authorized...');
 
-//     try {
-//         const orders = await Order.find({user: req.user._id});
-//         res.status(200).json({
-//             success: true,
-//             orders
-//         })
-//         next();
-//     } catch (error) {
-//         return next(new ErrorResponse('Server error', 500));
-//     }
-// }
+    res.status(200).send(order);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
+// GET ORDER STATS
+const getOrderStats = async (req, res) => {
+  const previousMonth = moment()
+    .month(moment().month() - 2)
+    .format();
 
-// //display single order
-// exports.singleOrder = async (req, res, next)=>{
+  try {
+    const orders = await Order.aggregate([
+      { $match: { createdAt: { $gte: new Date(previousMonth) } } },
+      {
+        $project: {
+          month: { $month: '$createdAt' },
+        },
+      },
+      {
+        $group: {
+          _id: '$month',
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+    res.status(200).send(orders);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-//     try {
-//         const singleOrder = await Order.findById(req.params.id);
-//         res.status(200).json({
-//             success: true,
-//             singleOrder
-//         })
-//         next();
-//     } catch (error) {
-//         return next(new ErrorResponse('Server error', 500));
-//     }
-// }
+// GET MONTHLY INCOME
 
-// //display single order
-// exports.deleteOrderAdmin = async (req, res, next)=>{
+const getIncome = async (req, res) => {
+  const previousMonth = moment()
+    .month(moment().month() - 2)
+    .format();
 
-//     try {
-//         const deleteOrder = await Order.findByIdAndRemove(req.params.id);
-//         res.status(200).json({
-//             success: true,
-//             message: "order deleted"
-//         })
-//         next();
-//     } catch (error) {
-//         return next(new ErrorResponse('Server error', 500));
-//     }
-// }
+  try {
+    const income = await Order.aggregate([
+      { $match: { createdAt: { $gte: new Date(previousMonth) } } },
+      {
+        $project: {
+          month: { $month: '$createdAt' },
+          sales: '$total',
+        },
+      },
+      {
+        $group: {
+          _id: '$month',
+          total: { $sum: '$sales' },
+        },
+      },
+    ]);
+    res.status(200).send(income);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-// //update order
-// exports.updateOrderAdmin = async (req, res, next)=>{
+// WEEK'S SALES
 
-//     try {
-//         const order = await Order.findById(req.params.id);
-//         if  (Order){
-//             order.isPaid = true;
-//         }
-//         const updateOrder = await order.save();
+const getWeekSales = async (req, res) => {
+  const last7Days = moment()
+    .day(moment().day() - 7)
+    .format();
 
-//         res.status(200).json({
-//             success: true,
-//             order: updateOrder,
-//             message: "order Paid"
-//         })
-//         next();
-//     } catch (error) {
-//         return next(new ErrorResponse('Server error', 500));
-//     }
-// }
+  try {
+    const income = await Order.aggregate([
+      { $match: { createdAt: { $gte: new Date(last7Days) } } },
+      {
+        $project: {
+          day: { $dayOfWeek: '$createdAt' },
+          sales: '$total',
+        },
+      },
+      {
+        $group: {
+          _id: '$day',
+          total: { $sum: '$sales' },
+        },
+      },
+    ]);
+    res.status(200).send(income);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 
-// //delivered order
-// exports.deliverOrderAdmin = async (req, res, next)=>{
-
-//     try {
-//         const order = await Order.findById(req.params.id);
-//         if  (Order){
-//             order.isDelivered = true;
-//             order.deliveredAt = Date.now();
-//         }
-//         const deliveredOrder = await order.save();
-
-//         res.status(200).json({
-//             success: true,
-//             order: deliveredOrder,
-//             message: "order Delivered"
-//         })
-//         next();
-//     } catch (error) {
-//         return next(new ErrorResponse('Server error', 500));
-//     }
-// }
-
-
-// // create orders
-// exports.createOrder = async (req, res, next)=>{
-//     try {
-//         //const cookie = req.cookies['token'];
-//         if (req.body.orderItems.length === 0){
-//             res.status(400).json({
-//                 message: "Cart is empty"
-//             });
-//         } else{
-//             const order =  new Order({
-//                 orderItems: req.body.orderItems,
-//                 shippingAddress: req.body.shippingAddress,
-//                 itemsPrice: req.body.itemsPrice,
-//                 shippingPrice: req.body.shippingPrice,
-//                 taxPrice: req.body.taxPrice,
-//                 totalPrice: req.body.totalPrice,
-//                 user: req.user._id
-//             });
-
-//             const newOrder = await order.save();
-//             //update order after purchase
-//             for (const index in order.orderItems) {
-//                 const item = order.orderItems[index];
-//                 const product = await Product.findById(item.product);
-//                 product.countStock -= item.quantity;
-//                 await product.save();
-//                 }
-
-//             res.status(201).json({
-//                 message: "New Order created",
-//                 newOrder
-//             })
-//         }
-        
-
-//     } catch (err) {
-//         next(err);
-//     }
-// }
-
-
+module.exports = {
+  updateOrder,
+  deleteOrder,
+  getOrderStats,
+  getAllOrders,
+  getIncome,
+  getWeekSales,
+};
 

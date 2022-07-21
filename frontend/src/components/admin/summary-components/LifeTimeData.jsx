@@ -1,11 +1,6 @@
 import styled from "styled-components";
 
-import {useSelector} from 'react-redux';
-
-
 const LifeTimeData = () => {
-  const {items} = useSelector(state => state.products)
-
   return (
     <Main>
       <h3>All Times</h3>
@@ -15,7 +10,7 @@ const LifeTimeData = () => {
       </Info>
       <Info>
         <Title>Products</Title>
-        <Data>{items.length}</Data>
+        <Data>70</Data>
       </Info>
       <Info>
         <Title>Orders</Title>

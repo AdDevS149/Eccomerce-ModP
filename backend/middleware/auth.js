@@ -1,3 +1,65 @@
+const auth = (req, res, next) => {
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+    if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401);
+    const token = authHeader.split(' ')[1];
+    console.log(token)
+
+
+
+    
+    jwt.verify(
+        token,
+        process.env.ACCESS_TOKEN_SECRET,
+        (err, decoded) => {
+            if (err) return res.sendStatus(403); //invalid token
+            req.user = decoded.UserInfo.username;
+            // req.roles = decoded.UserInfo.roles;
+            next();
+        }
+    );
+  }
+
+
+// For User Profile
+const isUser = (req, res, next) => {
+  auth(req, res, () => {
+    if (req.user._id === req.params.id || req.user.isAdmin) {
+      next();
+    } else {
+      res.status(403).send("Access denied. Not authorized...");
+    }
+  });
+};
+
+
+// For Admin
+const isAdmin = (req, res, next) => {
+  auth(req, res, () => {
+    if (req.user.isAdmin) {
+      next();
+    } else {
+      res.status(403).send("Access denied. Not authorized...");
+    }
+  });
+};
+
+module.exports = { auth, isUser, isAdmin };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // const jwt = require("jsonwebtoken");
 
 // const auth = (req, res, next) => {
@@ -15,26 +77,5 @@
 //   }
 // };
 
-// // For User Profile
-// const isUser = (req, res, next) => {
-//   auth(req, res, () => {
-//     if (req.user._id === req.params.id || req.user.isAdmin) {
-//       next();
-//     } else {
-//       res.status(403).send("Access denied. Not authorized...");
-//     }
-//   });
-// };
 
-// // For Admin
-// const isAdmin = (req, res, next) => {
-//   auth(req, res, () => {
-//     if (req.user.isAdmin) {
-//       next();
-//     } else {
-//       res.status(403).send("Access denied. Not authorized...");
-//     }
-//   });
-// };
 
-// module.exports = { auth, isUser, isAdmin };

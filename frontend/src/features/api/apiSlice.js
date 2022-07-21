@@ -1,7 +1,7 @@
 // https://www.youtube.com/watch?v=-JJFQ9bkUbo
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setCredentials, logOut } from '../auth/authSlice';
+import { setCredentials, logOut} from '../auth/login/authSlice';
 
 // compared with axios
 const baseQuery = fetchBaseQuery({
@@ -17,6 +17,7 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+// This basequery wrapper allows for sending refresh tokens
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
@@ -44,6 +45,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['Product'],
+  tagTypes: ['Auth', 'Product', 'User'],
   endpoints: (builder) => ({}),
 });

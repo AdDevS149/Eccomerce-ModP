@@ -26,7 +26,7 @@ const Transactions = () => {
   return (
     <StyledTransactions>
       {isLoading ? (
-        <p>Transactions loading...</p>
+        <p>Transctions loading...</p>
       ) : (
         <>
           <h3>Latest Transactions</h3>

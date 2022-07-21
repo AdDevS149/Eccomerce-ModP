@@ -1,3 +1,40 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      // minlength: 3,
+      // maxlength: 30,
+    },
+    email: {
+      type: String,
+      required: true,
+      // minlength: 3,
+      // maxlength: 200,
+      unique: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    password: {
+      type: String,
+      required: true,
+      // minlength: 3,
+      // maxlength: 1024,
+    },
+
+    refreshToken: [String],
+  },
+
+  { timestamps: true }
+);
+
+module.exports = mongoose.model('User', userSchema);
+
 // const mongoose = require('mongoose');
 // const validator = require('validator');
 // const bcrypt = require('bcryptjs');

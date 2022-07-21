@@ -1,72 +1,35 @@
-// const mongoose = require('mongoose');
-// const { ObjectId } = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+// const ObjectId = mongoose.Types.ObjectId;
 
-// const reviewSchema = mongoose.Schema(
+const productSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    brand: { type: String, required: true },
+    desc: { type: String, required: true },
+    price: { type: Number, required: true },
+    image: { type: Object, required: true },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model('Product', productSchema);
+
+// const mongoose = require('mongoose');
+// const Schema = mongoose.Schema;
+// image: { type: Object, required: true },
+// const productSchema = new Schema(
 //   {
 //     name: { type: String, required: true },
-//     rating: { type: Number, required: true },
-//     comment: { type: String, required: true },
-//     user: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       required: true,
-//       ref: 'User',
-//     },
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );
-
-// const productSchema = new mongoose.Schema(
-//   {
-//     name: {
-//       type: String,
-//       trim: true,
-//       required: [true, 'Please add the product name'],
-//       maxlength: 32,
-//     },
-
-//     description: {
-//       type: String,
-//       trim: true,
-//       required: [true, 'Please add the product description'],
-//       maxlength: 2000,
-//     },
-
-//     price: {
-//       type: Number,
-//       trim: true,
-//       required: [true, 'Product must have a price'],
-//       maxlength: 32,
-//     },
-
-//     category: {
-//       type: ObjectId,
-//       ref: 'Category',
-//       required: [true, 'Product must belong to a category'],
-//     },
-
-//     countStock: {
-//       type: Number,
-//     },
-
-//     avatar: {
-//       type: String,
-//     },
-
-//     reviews: [reviewSchema],
-
-//     rating: {
-//       type: Number,
-//       required: true,
-//       default: 0,
-//     },
-
-//     numReviews: {
-//       type: Number,
-//       required: true,
-//       default: 0,
-//     },
+//     desc: { type: String, required: true },
+//     categories: { type: Array },
+//     size: { type: Array },
+//     color: { type: Array },
+//     price: { type: Number, required: true },
+//     inStock: { type: Boolean, default: true },
+//     isFeatured: { type: Boolean, default: false },
+//     // brand: { type: String, required: true },
+//     image: { type: Object, /*required: true */},
 //   },
 //   { timestamps: true }
 // );

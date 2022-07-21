@@ -1,81 +1,122 @@
-// import { Link } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
-// import styled from "styled-components";
-// import { logoutUser } from "../slices/authSlice";
-// import { toast } from "react-toastify";
+import React from 'react';
+import styled from 'styled-components';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { Badge } from '@mui/material';
+import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
+import { mobile } from '../responsive';
+import { useSelector, useDispatch} from 'react-redux';
+import { NavLink, Link } from 'react-router-dom';
+import {logoutUser} from '../slices/authSlice'
 
-// const NavBar = () => {
-//   const dispatch = useDispatch();
-//   const { cartTotalQuantity } = useSelector((state) => state.cart);
-//   const auth = useSelector((state) => state.auth);
+const Navbar = () => {
+  const {cartTotalQuantity} = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
-//   return (
-//     <nav className="nav-bar">
-//       <Link to="/">
-//         <h2>MOD^P</h2>
-//       </Link>
-//       <Link to="/cart">
-//         <div className="nav-bag">
-//           <svg
-//             xmlns="http://www.w3.org/2000/svg"
-//             width="35"
-//             height="35"
-//             fill="currentColor"
-//             className="bi bi-handbag-fill"
-//             viewBox="0 0 16 16"
-//           >
-//             <path d="M8 1a2 2 0 0 0-2 2v2H5V3a3 3 0 1 1 6 0v2h-1V3a2 2 0 0 0-2-2zM5 5H3.36a1.5 1.5 0 0 0-1.483 1.277L.85 13.13A2.5 2.5 0 0 0 3.322 16h9.355a2.5 2.5 0 0 0 2.473-2.87l-1.028-6.853A1.5 1.5 0 0 0 12.64 5H11v1.5a.5.5 0 0 1-1 0V5H6v1.5a.5.5 0 0 1-1 0V5z" />
-//           </svg>
-//           <span className="bag-quantity">
-//             <span>{cartTotalQuantity}</span>
-//           </span>
-//         </div>
-//       </Link>
-//       {auth._id ? (
-//         <Links>
-//           {auth.isAdmin ? (
-//             <div>
-//               <Link to="/admin/summary">Admin</Link>
-//             </div>
-//           ) : null}
-//           <div
-//             onClick={() => {
-//               dispatch(logoutUser(null));
-//               toast.warning("Logged out!", { position: "bottom-left" });
-//             }}
-//           >
-//             Logout
-//           </div>
-//         </Links>
-//       ) : (
-//         <AuthLinks>
-//           <Link to="/login">Login</Link>
-//           <Link to="register">Register</Link>
-//         </AuthLinks>
-//       )}
-//     </nav>
-//   );
-// };
+  // console.log(quantity);
 
-// export default NavBar;
+  // console.log('quantity', quantity)
+  return (
+    <Container>
+      <Wrapper>
+        <Left>
+          <Language>EN</Language>
+          <SearchContainer>
+            <Input placeholder='Search' />
+            <SearchOutlinedIcon style={{ color: 'gray', fontSize: 16 }} />
+          </SearchContainer>
+        </Left>
+        <Center>
+          <NavLink to='/'>
+            <Logo>MOD^P</Logo>
+          </NavLink>
+        </Center>
+        <Right>
+          <NavLink to='/admin/summary'>
+            <MenuItem>Admin</MenuItem>
+          </NavLink>
+          <NavLink to='/public/register'>
+            <MenuItem>Register</MenuItem>
+          </NavLink>
 
-// const AuthLinks = styled.div`
-//   a {
-//     &:last-child {
-//       margin-left: 2rem;
-//     }
-//   }
-// `;
+          <NavLink to='/public/login'>
+            <MenuItem>Sign In</MenuItem>
+          </NavLink>
+          <Link to='/cart'>
+            <MenuItem>
+              <Badge badgeContent={cartTotalQuantity} color='primary'>
+                <LocalMallOutlinedIcon />
+              </Badge>
+            </MenuItem>
+          </Link>
+          <NavLink to='/' onClick={() => {dispatch(logoutUser(null))}}>
+            <MenuItem>Logout</MenuItem>
+          </NavLink>
+        </Right>
+      </Wrapper>
+    </Container>
+  );
+};
 
-// const Links = styled.div`
-//   color: white;
-//   display: flex;
+const Container = styled.div`
+  height: 60px;
+  ${mobile({ height: '50px' })}
+`;
 
-//   div {
-//     cursor: pointer;
+const Wrapper = styled.div`
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  ${mobile({ padding: '10px 0px' })}
+`;
 
-//     &:last-child {
-//       margin-left: 2rem;
-//     }
-//   }
-// `;
+const Left = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+`;
+
+const Language = styled.span`
+  font-size: 14px;
+  cursor: pointer;
+  ${mobile({ display: 'none' })}
+`;
+
+const SearchContainer = styled.div`
+  border: 0.5px solid lightgray;
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+  padding: 5px;
+`;
+
+const Input = styled.input`
+  border: none;
+  ${mobile({ width: '50px' })}
+`;
+
+const Center = styled.div`
+  flex: 1;
+  text-align: center;
+`;
+
+const Logo = styled.h1`
+  font-weight: bold;
+  ${mobile({ fontSize: '24px' })}
+`;
+const Right = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  ${mobile({ flex: 2, justifyContent: 'center' })}
+`;
+
+const MenuItem = styled.div`
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 25px;
+  ${mobile({ fontSize: '12px', marginLeft: '10px' })}
+`;
+
+export default Navbar;
